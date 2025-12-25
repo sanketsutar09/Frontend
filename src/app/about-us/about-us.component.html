@@ -1,0 +1,82 @@
+<!-- Hero Section -->
+<section class="bg-gray-900 text-white py-20">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h1 class="text-4xl lg:text-6xl font-bold mb-6">About DreamHomes</h1>
+    <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+      We are passionate about helping you find the perfect place to call home.
+      With a blend of innovative technology and a deep understanding of the real estate market,
+      we bring you closer to your dream property.
+    </p>
+  </div>
+</section>
+
+<!-- Mission Section -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 mt-16 gap-x-40 items-center">
+    <div class="">
+      <img src="https://st4.depositphotos.com/4764563/27192/v/450/depositphotos_271923572-stock-illustration-about-us-vector-flat-style.jpg"
+           alt="Mission"
+           class="rounded-3xl shadow-lg">
+    </div>
+    <div>
+      <h2 class="text-3xl font-bold mb-4 text-gray-900">Our Mission</h2>
+      <p class="text-gray-600 mb-6">
+        At DreamHomes, our mission is to simplify the home-buying experience
+        by combining cutting-edge tools with personalized service. We believe
+        in making the journey of finding a home exciting, transparent, and stress-free.
+      </p>
+      <a href="/contact" class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+        Get in Touch
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Values Section -->
+<section class="py-16 ">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-12 text-gray-900">Our Core Values</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-4">Integrity</h3>
+        <p class="text-gray-600">We operate with honesty and transparency at every step.</p>
+      </div>
+      <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-4">Innovation</h3>
+        <p class="text-gray-600">We leverage the latest technology to enhance your experience.</p>
+      </div>
+      <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-4">Customer Focus</h3>
+        <p class="text-gray-600">Your needs drive everything we do, from start to finish.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-12 text-gray-900">Meet Our Team</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      @for (member of team; track $index) {
+        <div class="text-center">
+          <img [src]="member.img" alt="{{ member.name }}"
+               class="w-32 h-32 object-cover rounded-full mx-auto shadow-lg mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">{{ member.name }}</h3>
+          <p class="text-gray-500">{{ member.role }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-blue-600 py-16 text-white text-center">
+  <h2 class="text-3xl font-bold mb-4">Let’s Find Your Dream Home Together</h2>
+  <p class="max-w-2xl mx-auto mb-6">
+    Join thousands of happy customers who found their dream home with DreamHomes.
+  </p>
+  <a href="/listings" class="px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+    Browse Listings
+  </a>
+</section>

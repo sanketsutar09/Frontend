@@ -1,0 +1,311 @@
+<div class="overflow-hidden bg-cyan-200 bg-gradient-to-r  bg-gradient from-indigo-50 via-white to-indigo-100">
+  <app-user-dashboard></app-user-dashboard>
+</div>
+
+<div class="p-6 min-h-screen lg:mt-0 sm:mt-15 md:mt-15  ">
+
+
+  <h2 class="text-4xl font-extrabold mb-8 text-center text-indigo-700 lg:mt-12">Available Properties</h2>
+
+ <!-- Filters Section -->
+<div
+  class="rounded-xl p-6 mb-10 max-w-7xl mx-auto
+         bg-gradient-to-t from-indigo-50 via-white to-indigo-100 
+         shadow-lg ring-1 ring-indigo-200">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+
+    <!-- Search -->
+    <div class="col-span-full lg:col-span-2">
+      <input type="text" placeholder="Search by address..." [(ngModel)]="searchText" 
+             (input)="filterProperties()"
+             class="w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white placeholder-gray-400 
+                    border border-indigo-200 rounded-md shadow-sm 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 
+                    transition" />
+    </div>
+
+    <!-- Address Filter -->
+    <select [(ngModel)]="selectedAddress" (change)="filterProperties()" 
+            class="filter-select custom-select">
+      <option value="" selected class="text-gray-400">All Addresses</option>
+      @for (addr of uniqueAddresses; track $index) {
+        <option [value]="addr">{{ addr }}</option>
+      }
+    </select>
+
+    <!-- Type Filter -->
+    <select [(ngModel)]="selectedType" (change)="filterProperties()" 
+            class="filter-select custom-select">
+      <option value="" selected class="text-gray-400">All Types</option>
+      @for (t of uniqueTypes; track $index) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+
+    <!-- BHK Filter -->
+    <select [(ngModel)]="selectedBHK" (change)="filterProperties()" 
+            class="filter-select custom-select">
+      <option value="" selected class="text-gray-400">All BHK</option>
+      @for (b of uniqueBHKs; track $index) {
+        <option [value]="b">{{ b }}</option>
+      }
+    </select>
+
+    <!-- Furnished Filter -->
+    <select [(ngModel)]="selectedFurnished" (change)="filterProperties()" 
+            class="filter-select custom-select">
+      <option value="" selected class="text-gray-400">All Furnished</option>
+      @for (f of uniqueFurnished; track $index) {
+        <option [value]="f">{{ f }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Second Row: Price & Size Filters -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-4">
+
+    <!-- Price Range -->
+    <div class="flex gap-2">
+      <input type="number" [(ngModel)]="minPrice" (input)="filterProperties()" 
+             placeholder="Min Price"
+             class="w-full px-3 py-2 text-sm border text-black border-indigo-200 rounded-md shadow-sm 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400" />
+      <input type="number" [(ngModel)]="maxPrice" (input)="filterProperties()" 
+             placeholder="Max Price"
+             class="w-full px-3 py-2 text-sm border text-black border-indigo-200 rounded-md shadow-sm 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400" />
+    </div>
+
+    <!-- Size Range -->
+    <div class="flex gap-2">
+      <input type="number" [(ngModel)]="minSize" (input)="filterProperties()" 
+             placeholder="Min Size (sqft)"
+             class="w-full px-3 py-2 text-sm border text-black border-indigo-200 rounded-md shadow-sm 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400" />
+      <input type="number" [(ngModel)]="maxSize" (input)="filterProperties()" 
+             placeholder="Max Size (sqft)"
+             class="w-full px-3 py-2 text-sm border text-black border-indigo-200 rounded-md shadow-sm 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400" />
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+ <!-- Property Cards -->
+<div class="mt-5 grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+
+  <!-- No Records Found Message -->
+  @if (filteredProperties.length === 0) {
+  <div class="col-span-full text-center text-gray-500 text-xl font-semibold py-20">
+    No properties found matching your criteria.
+  </div>
+  }
+
+  <!-- Property Card Loop -->
+  @for (prop of (showAllProperties ? filteredProperties : filteredProperties.slice(0, 6)); track prop._id ?? $index) {
+  <div class="bg-white rounded-3xl shadow-lg hover:shadow-2xl transform transition duration-300 hover:scale-[1.03] border border-gray-200 overflow-hidden">
+
+    <!-- Image + Navigation Buttons -->
+   <div class="relative w-full h-64 rounded-t-3xl overflow-hidden shadow-lg group">
+
+  <!-- Image -->
+  <img
+    [src]="getImageUrl(prop.images[prop.currentImageIndex])"
+    class="w-full h-full object-cover rounded-t-3xl transition-transform duration-500 transform group-hover:scale-110 cursor-pointer"
+    (click)="openImageModal(getImageUrl(prop.images[prop.currentImageIndex]))"
+  />
+
+  <!-- Left Button -->
+  <button
+    class="absolute left-3 top-1/2 z-50 transform -translate-y-1/2 bg-white/70 hover:bg-white text-indigo-700 p-1 rounded-full shadow-lg transition hover:scale-110"
+    (click)="prevImage(prop)"
+  >❮</button>
+
+  <!-- Right Button -->
+  <button
+    class="absolute right-3 top-1/2 z-50 transform -translate-y-1/2 bg-white/70 hover:bg-white text-indigo-700 p-1 rounded-full shadow-lg transition hover:scale-110"
+    (click)="nextImage(prop)"
+  >❯</button>
+
+</div>
+
+
+    <!-- Card Content -->
+    <div class="p-6 space-y-4">
+      <h3 class="text-2xl font-bold text-indigo-600 hover:text-indigo-800 transition duration-300">{{ prop.title }}</h3>
+      <p class="text-gray-600 leading-relaxed text-lg line-clamp-3">{{ prop.description }}</p>
+
+      <!-- Info Grid -->
+      <div class="grid grid-cols-2 gap-3 text-sm text-gray-700 border-t border-gray-200 pt-4">
+        <div class="font-semibold text-base"><span >Type:</span> {{ prop.type }}</div>
+        <div class="font-semibold text-base"><span >BHK:</span> {{ prop.bhk }}</div>
+        <div class="font-semibold text-base"><span >Size:</span> {{ prop.size }} sqft</div>
+        <div class="font-semibold text-base"><span >Price:</span> ₹{{ prop.price }}</div>
+        <div class="col-span-2 mt-2 font-semibold text-base">
+          <span class="">Availability:</span>
+          <span class="" [ngClass]="{
+            'text-green-600': prop.available > 0,
+            'text-red-500': prop.available === 0
+          }">
+            {{ prop.available > 0 ? prop.available + ' Available' : 'Fully Booked' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-3 justify-center pt-4">
+        <button
+          class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="prop.available <= 0"
+          (click)="bookProperty(prop._id)">
+          Book Now
+        </button>
+
+        <button
+          class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-medium shadow-md transition duration-300"
+          (click)="openDetailsModal(prop)">
+          View Details
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+
+  <!-- See All / Show Less Buttons -->
+  <div class="text-center mt-6">
+    @if (!showAllProperties && filteredProperties.length > 4) {
+    <button (click)="showAllProperties = true"
+      class="btn-primary px-6 py-2 rounded-md shadow-md hover:bg-indigo-700 transition">
+      See All Properties
+    </button>
+    }
+    @if (showAllProperties && filteredProperties.length > 4) {
+    <button (click)="showAllProperties = false"
+      class="btn-secondary px-6 py-2 rounded-md shadow-md hover:bg-gray-600 transition">
+      Show Less
+    </button>
+    }
+  </div>
+
+  <!-- Image Modal -->
+  @if (showImageModal) {
+  <div class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    (click)="closeImageModal()">
+
+    <div
+      class="relative max-w-5xl w-full rounded-2xl overflow-hidden shadow-2xl transform transition-all scale-100 hover:scale-[1.01]"
+      (click)="$event.stopPropagation()">
+
+      <!-- Image -->
+      <img [src]="modalImageUrl" class="w-full h-auto max-h-[85vh] object-contain bg-gray-900" />
+
+      <!-- Close Button -->
+      <button
+        class="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-white text-2xl font-bold rounded-full p-2 shadow-lg transition"
+        (click)="closeImageModal()">
+        ✕
+      </button>
+    </div>
+  </div>
+  }
+
+
+  <!-- Details Modal -->
+  @if (showDetailsModal && selectedProperty) {
+  <div class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 px-4"
+    (click)="closeDetailsModal()">
+
+    <div
+      class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-8 relative transform transition-all scale-100 hover:scale-[1.01]"
+      (click)="$event.stopPropagation()">
+
+      <!-- Title -->
+      <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">
+        Property Details
+      </h2>
+
+      <!-- Owner Section -->
+      <section class="mb-8">
+        <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+          Owner Details
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-gray-700">
+          <div><span class="font-semibold">Name:</span> {{ selectedProperty.name }}</div>
+          <div><span class="font-semibold">Email:</span> {{ selectedProperty.email }}</div>
+          <div class="sm:col-span-2"><span class="font-semibold">Contact:</span> {{ selectedProperty.phone }}</div>
+        </div>
+      </section>
+
+      <!-- Property Section -->
+      <section>
+        <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+          Property Details
+        </h3>
+        <div class="mb-6">
+          <h4 class="text-lg font-bold text-gray-900">{{ selectedProperty.title }}</h4>
+          <p class="text-gray-600 leading-relaxed mt-2">
+            {{ selectedProperty.description }}
+          </p>
+        </div>
+
+        <!-- Property Info Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-gray-700 text-sm">
+          <div><span class="font-semibold">Type:</span> {{ selectedProperty.type }}</div>
+          <div><span class="font-semibold">BHK:</span> {{ selectedProperty.bhk }}</div>
+          <div><span class="font-semibold">Size:</span> {{ selectedProperty.size }} sqft</div>
+          <div><span class="font-semibold">Price:</span> ₹{{ selectedProperty.price }}</div>
+          <div><span class="font-semibold">Address:</span> {{ selectedProperty.address }}</div>
+          <div><span class="font-semibold">Furnished:</span> {{ selectedProperty.furnished }}</div>
+          <div class="mt-2 text-sm font-semibold" [ngClass]="{
+       'text-green-600': selectedProperty.available > 0,
+       'text-red-500': selectedProperty.available === 0
+     }">
+            {{ selectedProperty.available > 0 ?
+            selectedProperty.available + ' Available' :
+            'Fully Booked' }}
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="mt-8 flex justify-end">
+        <button
+          class="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium shadow-sm transition"
+          (click)="closeDetailsModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+
+</div>
+
+
+
+<div>
+  <app-about-us></app-about-us>
+</div>
+
+<div>
+  <app-contact-us></app-contact-us>
+</div>
+
+<div>
+  <app-user-footer></app-user-footer>
+</div>
+
+<div>
+  @if (alertMessage) {
+  <app-alert [message]="alertMessage" [type]="alertType"></app-alert>
+  }
+</div>
+

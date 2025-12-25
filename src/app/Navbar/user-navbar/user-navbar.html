@@ -1,0 +1,293 @@
+<!-- Wrapper -->
+<div
+  class=" lg:min-h-screen flex flex-col lg:flex-row bg-cyan-200 bg-gradient-to-r  bg-gradient from-indigo-50 via-white to-indigo-100  ">
+
+  <!-- Sidebar for lg screens -->
+  <aside class="hidden lg:flex flex-col sticky top-0 h-screen w-64 
+           bg-gradient-to-tr from-indigo-50 via-white to-indigo-100 shadow-md
+           px-4 py-6 z-50">
+    <!-- Branding -->
+    <div class="text-2xl font-extrabold text-gray-800 tracking-wide mb-12">
+      Dream<span class="text-indigo-600">Homes</span>
+    </div>
+
+    <!-- Nav menu -->
+    <nav class="flex flex-col space-y-8 text-gray-600 font-medium text-lg ">
+
+      <button (click)="uploadProperty()" class="flex items-center gap-3 hover:text-indigo-600 py-2">
+        <!-- House Up SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-house-up-fill"
+          viewBox="0 0 16 16">
+          <path
+            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 1 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.707l1.5-1.5a.5.5 0 0 1 .708 0Z" />
+          <path
+            d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z" />
+          <path d="m8 3.293 4.712 4.712A4.5 4.5 0 0 0 8.758 15H3.5A1.5 1.5 0 0 1 2 13.5V9.293z" />
+        </svg>
+        Upload Property
+      </button>
+
+      <button (click)="onPropertyList()" class="flex items-center gap-3 hover:text-indigo-600 py-2">
+        <!-- House Door SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-house-door-fill"
+          viewBox="0 0 16 16">
+          <path
+            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+        </svg>
+        Home
+      </button>
+
+      <button (click)="onAboutUs()" class="flex items-center gap-3 hover:text-indigo-600 py-2">
+        <!-- Info Circle SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle"
+          viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+          <path
+            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+        </svg>
+        About
+      </button>
+
+      <button (click)="onContactUs()" class="flex items-center gap-3 hover:text-indigo-600 py-2">
+        <!-- Person Lines SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+          class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+          <path
+            d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+        </svg>
+        Contact Us
+      </button>
+
+       @if (isLoggedIn) {
+  <button (click)="onFeedBack()"
+          class="py-2 flex items-center gap-3 w-full text-left  font-semibold hover:text-indigo-600 transition-colors">
+    <!-- Person Circle SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+         fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+      <path fill-rule="evenodd"
+            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8
+               m8-7a7 7 0 0 0-5.468 11.37
+               C3.242 11.226 4.805 10 8 10
+               s4.757 1.225 5.468 2.37
+               A7 7 0 0 0 8 1" />
+    </svg>
+    FeedBack
+  </button>
+}
+
+      @if (isLoggedIn) {
+  <button (click)="onUserProfile()"
+          class="py-2 flex items-center gap-3 w-full text-left  font-semibold hover:text-indigo-600 transition-colors">
+    <!-- Person Circle SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+         fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+      <path fill-rule="evenodd"
+            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8
+               m8-7a7 7 0 0 0-5.468 11.37
+               C3.242 11.226 4.805 10 8 10
+               s4.757 1.225 5.468 2.37
+               A7 7 0 0 0 8 1" />
+    </svg>
+    My Profile
+  </button>
+}
+
+
+      <!-- Sign In Dropdown -->
+      <div class="relative mt-4 py-2">
+        <button (click)="isLoggedIn ? onSignOut() : toggleDropdown($event)"
+          class="flex items-center gap-3 w-full text-left font-semibold hover:text-indigo-600 transition-colors">
+          <!-- Person Circle SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle"
+            viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 
+         11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 
+         5.468 2.37A7 7 0 0 0 8 1" />
+          </svg>
+          {{ isLoggedIn ? 'Sign Out' : 'Sign In' }}
+        </button>
+
+
+
+        @if (dropdownOpen) {
+  <div class="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-100 z-10">
+    <button (click)="onUserLogin()"
+            class="w-full px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+      <!-- User Icon -->
+      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5.121 17.804A13.937 13.937 0 0112 15
+                 c2.21 0 4.29.534 6.121 1.475M12 15v2a3 3 0 01-6 0v-2
+                 m6 2a3 3 0 006 0v-2m-6 0V9a3 3 0 016 0v6" />
+      </svg>
+      User
+    </button>
+
+    <button class="w-full px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+      <!-- Admin Icon -->
+      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4
+                 8 5.79 8 8s1.79 4 4 4zm0 2
+                 c-4.42 0-8 1.79-8 4v2h16v-2
+                 c0-2.21-3.58-4-8-4z" />
+      </svg>
+      Admin
+    </button>
+  </div>
+}
+
+      </div>
+
+    </nav>
+  </aside>
+
+  <!-- Top Navbar for small and medium screens -->
+  <header class="lg:hidden w-screen fixed top-0 sm:bg-cyan-200 bg-gradient-to-tr from-indigo-50 via-white to-indigo-100 shadow-md
+         flex items-center justify-between px-8 h-16 z-10">
+    <!-- Branding (now on left) -->
+    <div class="text-xl font-extrabold text-gray-800 tracking-wide">
+      Real<span class="text-indigo-600">Estate</span>
+    </div>
+
+    <!-- Hamburger (now on right) -->
+    <button (click)="menuOpen = !menuOpen" aria-label="Toggle menu" [attr.aria-expanded]="menuOpen"
+      class="focus:outline-none">
+      <svg [ngClass]="{
+        'transform rotate-90 transition-transform duration-300': menuOpen,
+        'transition-transform duration-300': !menuOpen
+      }" class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </header>
+
+
+  <!-- Dropdown menu when hamburger clicked on small/medium -->
+  @if (menuOpen) {
+  <nav
+    class="lg:hidden fixed top-16 left-0 right-0 bg-indigo-50 shadow-md border-t border-indigo-300 z-40">
+    <div class="flex flex-col px-4 py-4 space-y-4 text-gray-700 font-medium">
+
+      <button (click)="uploadProperty(); menuOpen = false"
+        class="flex items-center gap-3 hover:text-indigo-600 py-2 text-left">
+        <!-- House Up SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          class="bi bi-house-up-fill" viewBox="0 0 16 16">
+          <path
+            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 1 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.707l1.5-1.5a.5.5 0 0 1 .708 0Z" />
+          <path
+            d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z" />
+          <path d="m8 3.293 4.712 4.712A4.5 4.5 0 0 0 8.758 15H3.5A1.5 1.5 0 0 1 2 13.5V9.293z" />
+        </svg>
+        Upload Property
+      </button>
+
+      <button (click)="onPropertyList(); menuOpen = false"
+        class="flex items-center gap-3 hover:text-indigo-600 py-2 text-left">
+        <!-- House Door SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          class="bi bi-house-door-fill" viewBox="0 0 16 16">
+          <path
+            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+        </svg>
+        Home
+      </button>
+
+      <a href="#" class="flex items-center gap-3 hover:text-indigo-600 py-2">
+        <!-- Info Circle SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          class="bi bi-info-circle" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+          <path
+            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+        </svg>
+        About
+      </a>
+
+      <a href="#" class="flex items-center gap-3 hover:text-indigo-600 py-2">
+        <!-- Person Lines SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+          <path
+            d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+        </svg>
+        Contact Us
+      </a>
+
+      @if (isLoggedIn) {
+        <button (click)="onUserProfile()"
+          class="flex items-center gap-3 w-full text-left text-gray-800 font-semibold hover:text-indigo-600 transition-colors">
+          <!-- Person Circle SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+            class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+            <path fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7
+              a7 7 0 0 0-5.468 11.37C3.242 11.226
+              4.805 10 8 10s4.757 1.225 5.468 2.37
+              A7 7 0 0 0 8 1" />
+          </svg>
+          My Profile
+        </button>
+      }
+
+      <!-- Sign In / Out button -->
+      <div class="border-t border-indigo-300 pt-4">
+        <button
+          (click)="isLoggedIn ? onSignOut() : toggleDropdown($event)"
+          class="flex items-center gap-3 w-full text-left text-gray-800 font-semibold hover:text-indigo-600 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+            class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+            <path fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 
+              11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 
+              5.468 2.37A7 7 0 0 0 8 1" />
+          </svg>
+          {{ isLoggedIn ? 'Sign Out' : 'Sign In' }}
+        </button>
+      </div>
+
+      <!-- Dropdown -->
+      @if (dropdownOpen) {
+        <div class="relative right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border border-gray-100">
+          <button (click)="onUserLogin()"
+            class="w-full px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M5.121 17.804A13.937 13.937 0 0112 15c2.21 0 4.29.534 6.121 1.475M12 15v2a3 3 0 01-6 0v-2m6 2a3 3 0 006 0v-2m-6 0V9a3 3 0 016 0v6" />
+            </svg>
+            User
+          </button>
+
+          <button
+            class="w-full px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z" />
+            </svg>
+            Admin
+          </button>
+        </div>
+      }
+    </div>
+  </nav>
+}
+
+
+
+</div>
+
+<div>
+  @if (alertMessage) {
+    
+    <app-alert [message]="alertMessage" [type]="alertType"></app-alert>
+  }
+</div>

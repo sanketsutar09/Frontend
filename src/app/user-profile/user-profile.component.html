@@ -1,0 +1,505 @@
+@if (isLoaded) {
+<div class="min-h-screen flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-7xl bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+    <!-- <h2 class="text-3xl font-extrabold text-indigo-700 mb-8 tracking-tight text-center">
+      User Profile
+    </h2> -->
+
+    <!-- View Mode -->
+    @if (!editMode) {
+    
+  <div
+    class="flex flex-col items-center text-center p-8 max-w-md mx-auto mt-10">
+    
+    <!-- Profile Image -->
+    <div class="relative w-36 h-36 mb-6">
+      <img [src]="user?.profileImage || 'assets/default-profile.png'" alt="Profile Image"
+        class="w-full h-full object-cover rounded-full border-4 border-indigo-100 shadow-lg" />
+    </div>
+
+    <!-- User Info -->
+    <p class="text-2xl font-extrabold text-gray-900 mb-2">
+      {{ user?.name }}
+    </p>
+    <p class="text-gray-500 mb-6">
+      {{ user?.email }}
+    </p>
+
+    <!-- Buttons -->
+    <div class="flex gap-4">
+      <!-- Edit Profile -->
+      <button (click)="editMode = true"
+        class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:bg-indigo-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        Edit Profile
+      </button>
+
+      <!-- Save Info -->
+      <button (click)="saveUserInfo()"
+        class="px-6 py-3 bg-green-600 text-white font-semibold rounded-xl shadow-lg hover:bg-green-700 hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+        Save Info
+      </button>
+    </div>
+  </div>
+
+
+
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold text-indigo-800 mb-6 border-b border-indigo-200 pb-2">
+        My Bookings
+      </h2>
+
+      @if (bookings.length > 0) {
+      <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+        <table class="min-w-full border-collapse border border-gray-200">
+          <thead class="bg-indigo-100">
+            <tr>
+              <th class="px-6 py-3 text-left text-indigo-800 font-semibold whitespace-nowrap">Property</th>
+              <th class="px-6 py-3 text-left text-indigo-800 font-semibold whitespace-nowrap">Type</th>
+              <th class="px-6 py-3 text-left text-indigo-800 font-semibold whitespace-nowrap">Price</th>
+              <th class="px-6 py-3 text-left text-indigo-800 font-semibold whitespace-nowrap">Check-in</th>
+              <th class="px-6 py-3 text-left text-indigo-800 font-semibold whitespace-nowrap">Furnished</th>
+              <th class="px-6 py-3 text-left text-indigo-800 font-semibold whitespace-nowrap">Address</th>
+              <th class="px-6 py-3 text-left text-indigo-800 font-semibold whitespace-nowrap">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            @for (booking of bookings; track booking._id) {
+            <tr class="hover:bg-indigo-50 transition">
+              <td class="px-6 py-3 text-gray-900 whitespace-nowrap">{{ booking.title }}</td>
+              <td class="px-6 py-3 text-gray-900 whitespace-nowrap">{{ booking.type }}</td>
+              <td class="px-6 py-3 text-gray-900 whitespace-nowrap">
+                {{ booking.price | currency:'INR':'symbol':'1.0-0' }}
+              </td>
+              <td class="px-6 py-3 text-gray-900 whitespace-nowrap">{{ booking.checkInDate | date }}</td>
+              <td class="px-6 py-3 text-gray-900 whitespace-nowrap">{{ booking.furnished }}</td>
+              <td class="px-6 py-3 text-gray-900 whitespace-nowrap">{{ booking.address }}</td>
+              <td class="px-6 py-3 whitespace-nowrap">
+                @if (isCancelable(booking.checkInDate)) {
+                <button (click)="openCancelModal(booking._id)"
+                  class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                  Cancel
+                </button>
+                }
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      } @else {
+      <p class="text-center text-gray-500 mt-6">No bookings found.</p>
+      }
+    </div>
+
+     
+    <!-- Properties Uploaded by User -->
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold text-indigo-800 mb-6 border-b border-indigo-200 pb-2">
+        Properties You Uploaded
+      </h2>
+
+      @if (properties.length > 0) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (property of properties; track property._id) {
+<article
+  class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 flex flex-col transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 hover:scale-105">
+
+  <!-- Property Title -->
+  <h3 class="text-2xl font-bold text-gray-900 mb-3 truncate" title="{{ property.title }}">
+    {{ property.title }}
+  </h3>
+
+  <!-- Property Description -->
+  <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+    {{ property.description }}
+  </p>
+
+  <!-- Property Details -->
+  <ul class="text-gray-700 text-sm space-y-1 flex-grow">
+    <li><span class="font-semibold">Type:</span> {{ property.type }}</li>
+    <li><span class="font-semibold">BHK:</span> {{ property.bhk }}</li>
+    <li><span class="font-semibold">Size:</span> {{ property.size }} sq.ft</li>
+    <li><span class="font-semibold">Price:</span> 
+      <span class="text-indigo-600 font-bold">₹{{ property.price | number }}</span>
+    </li>
+    <li><span class="font-semibold">Location:</span> {{ property.address }}</li>
+  </ul>
+
+  <!-- Availability Badge -->
+  <div class="mt-4">
+    @if (property.available > 0) {
+    <span class="inline-block px-3 py-1 text-sm font-semibold text-green-800 bg-green-100 rounded-full shadow-inner">
+      {{ property.available }} Available
+    </span>
+    } @else if (property.available === 0) {
+    <span class="inline-block px-3 py-1 text-sm font-semibold text-red-800 bg-red-100 rounded-full shadow-inner">
+      Fully Booked
+    </span>
+    }
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-6 flex justify-between gap-3">
+    <button (click)="openUpdateModal(property)"
+      class="flex-1 px-5 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-semibold">
+      Edit
+    </button>
+    <button (click)="openDeletePropertyModal(property._id)"
+      class="flex-1 px-5 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-semibold">
+      Delete
+    </button>
+  </div>
+</article>
+
+  <!-- Edit Property Popup -->
+  @if (showUpdateModal && selectedProperty) {
+  <div class="fixed inset-0 bg-black/95 bg-opacity-20 flex items-center justify-center z-50 p-4" (click)="closeUpdateModal()">
+    <div
+      class="bg-white rounded-3xl w-full max-w-5xl p-6 md:p-8 shadow-2xl transform transition-transform duration-300 scale-95 overflow-hidden max-h-[90vh] flex flex-col"
+      (click)="$event.stopPropagation()">
+
+      <!-- Modal Header -->
+      <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+        Update Property
+      </h3>
+
+      <!-- Modal Body (scrollable) -->
+      <div class="overflow-auto flex-1 pr-2">
+        <form [formGroup]="propertyForm" (ngSubmit)="submitUpdate()" class="space-y-8">
+
+          <!-- ========================= Your Details ========================= -->
+          <section class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Your Details</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Name -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input formControlName="name" type="text" placeholder="Enter your name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+                @if (propertyForm.get('name')?.touched && propertyForm.get('name')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Name is required.</span>
+                }
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input formControlName="email" type="email" placeholder="Enter your email"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+                @if (propertyForm.get('email')?.touched && propertyForm.get('email')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Valid email is required.</span>
+                }
+              </div>
+
+              <!-- Phone -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input formControlName="phone" type="text" placeholder="10-digit phone number"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+                @if (propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched) {
+                  <p class="text-red-500 text-sm">Enter a valid 10-digit phone number.</p>
+                }
+              </div>
+            </div>
+          </section>
+
+          <!-- ========================= Property Details ========================= -->
+          <section class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Property Details</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+              <!-- Title -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input formControlName="title" type="text" placeholder="Enter property title"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+                @if (propertyForm.get('title')?.touched && propertyForm.get('title')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Title is required.</span>
+                }
+              </div>
+
+              <!-- Description -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea formControlName="description" rows="3" placeholder="Enter property description"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"></textarea>
+                @if (propertyForm.get('description')?.touched && propertyForm.get('description')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Description is required.</span>
+                }
+              </div>
+
+              <!-- Type -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+                <select formControlName="type" (change)="onTypeChange($event)"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                  <option value="">Select</option>
+                  <option value="Flat">Flat</option>
+                  <option value="House">House</option>
+                  <option value="Room">Room</option>
+                </select>
+                @if (propertyForm.get('type')?.touched && propertyForm.get('type')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Property type is required.</span>
+                }
+              </div>
+
+              <!-- BHK -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">BHK</label>
+                <select formControlName="bhk" [disabled]="isRoomSelected"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                  <option value="">Select</option>
+                  <option value="1BHK">1BHK</option>
+                  <option value="2BHK">2BHK</option>
+                  <option value="3BHK">3BHK</option>
+                </select>
+                @if (propertyForm.get('bhk')?.touched && propertyForm.get('bhk')?.invalid && !isRoomSelected) {
+                  <span class="text-red-600 text-sm mt-1">BHK is required.</span>
+                }
+              </div>
+
+              <!-- Size -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Size (sqft)</label>
+                <input formControlName="size" type="number" placeholder="Size in sqft"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+                @if (propertyForm.get('size')?.touched && propertyForm.get('size')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Size is required.</span>
+                }
+              </div>
+
+              <!-- Price -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Price/Month (₹)</label>
+                <input formControlName="price" type="number" placeholder="Enter price"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+                @if (propertyForm.get('price')?.touched && propertyForm.get('price')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Price is required.</span>
+                }
+              </div>
+
+              <!-- Address -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Address (City/Village)</label>
+                <select formControlName="address"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                  <option value="">Select location</option>
+                  @for (loc of sangliLocations; track loc) {
+                    <option [value]="loc">{{ loc }}</option>
+                  }
+                </select>
+                @if (propertyForm.get('address')?.touched && propertyForm.get('address')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Address is required.</span>
+                }
+              </div>
+
+              <!-- Furnished -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Furnishing</label>
+                <select formControlName="furnished"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                  <option value="">Select</option>
+                  <option value="Furnished">Furnished</option>
+                  <option value="Semi-furnished">Semi-Furnished</option>
+                  <option value="Unfurnished">Unfurnished</option>
+                </select>
+                @if (propertyForm.get('furnished')?.touched && propertyForm.get('furnished')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Furnishing is required.</span>
+                }
+              </div>
+
+              <!-- Available -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Availability</label>
+                <input formControlName="available" type="number" placeholder="Available properties for rent"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+                @if (propertyForm.get('available')?.touched && propertyForm.get('available')?.invalid) {
+                  <span class="text-red-600 text-sm mt-1">Availability is required.</span>
+                }
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ========================= Images ========================= -->
+          <section class="border border-gray-200 rounded-xl p-6 bg-gray-50">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Update Images</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              @for (i of [0, 1, 2]; track i) {
+                <input type="file" #fileInput{{i}} (change)="onFileChange($event, i)" accept="image/*"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-green-500" />
+              }
+            </div>
+          </section>
+
+          <!-- Submit -->
+          <div class="flex justify-center pt-4">
+            <button type="submit" [disabled]="propertyForm.invalid"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+              Update Property
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+}
+
+      </div>
+      } @else {
+      <p class="text-center text-gray-500 mt-12 text-lg italic">
+        You have not uploaded any properties yet.
+      </p>
+      }
+    </div>
+
+    <div class="mt-12">
+      <h3 class="text-2xl font-bold text-indigo-800 mb-6 border-b border-indigo-200 pb-2">
+        Bookings for My Properties
+      </h3>
+
+      @if (ownerBookings.length) {
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        @for (booking of ownerBookings; track booking._id) {
+        <div
+          class="bg-white border border-gray-100 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 flex flex-col">
+
+          <h4 class="text-lg font-semibold text-gray-900 mb-2 truncate" title="{{ booking.propertyId?.title }}">
+            {{ booking.propertyId?.title }}
+          </h4>
+
+          <p class="text-gray-600 text-sm mb-1">
+            <span class="font-medium">Booked by:</span> {{ booking.name }} ({{ booking.email }})
+          </p>
+
+          <p class="text-gray-600 text-sm mb-1">
+            <span class="font-medium">Check-in:</span> {{ booking.checkInDate | date }}
+          </p>
+
+          <p class="text-gray-600 text-sm">
+            <span class="font-medium">Check-out:</span> {{ booking.checkOutDate | date }}
+          </p>
+
+          <!-- Optional badge for status -->
+          <div class="mt-4">
+            <span class="inline-block px-3 py-1 text-xs font-semibold bg-indigo-100 text-indigo-700 rounded-full">
+              Upcoming Stay
+            </span>
+          </div>
+
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="text-gray-400 italic text-center mt-6">
+        No one has booked your properties yet.
+      </p>
+      }
+    </div>
+     
+    }
+
+
+    
+
+    <!-- profile Popup Modal -->
+ <!-- Edit Mode -->
+    @if (editMode) {
+    <form (ngSubmit)="onUpdateProfile()" [formGroup]="profileForm" enctype="multipart/form-data" class="space-y-6 mt-8">
+      <div>
+        <input type="text" formControlName="name" placeholder="Name"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+      </div>
+
+      <!-- <div>
+        <input type="email" formControlName="email" placeholder="Email"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+      </div> -->
+
+      <div>
+        <input type="password" formControlName="password" placeholder="New Password"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+      </div>
+
+      <div>
+        <input type="file" (change)="onFileSelect($event)" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full
+                       file:border-0 file:text-sm file:font-semibold
+                       file:bg-indigo-50 file:text-indigo-700
+                       hover:file:bg-indigo-100 cursor-pointer" />
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button type="submit"
+          class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+          Save Changes
+        </button>
+        <button type="button" (click)="editMode = false"
+          class="px-6 py-3 bg-gray-300 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition">
+          Cancel
+        </button>
+      </div>
+    </form>
+    } 
+
+
+    
+
+  </div>
+
+</div>
+
+
+
+}
+
+  <!-- Tailwind Confirmation Modal -->
+    @if (showConfirm) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Confirm Cancellation</h3>
+        <p class="text-gray-600 mb-6">Are you sure you want to cancel this booking?</p>
+        <div class="flex justify-end space-x-3">
+          <button (click)="closeCancelModal()"
+            class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition">No</button>
+          <button (click)="confirmCancelBooking()"
+            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Yes, Cancel</button>
+        </div>
+      </div>
+    </div>
+    }
+
+
+    <!-- Property Delete Confirmation Modal -->
+
+ @if (showPropertyConfirm) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+    <h3 class="text-lg font-semibold mb-4">Confirm Delete</h3>
+    <p class="mb-6">Are you sure you want to delete this property?</p>
+    <div class="flex justify-center gap-4">
+      <button
+        (click)="confirmDeleteProperty()"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      >
+        Delete
+      </button>
+      <button
+        (click)="closeDeletePropertyModal()"
+        class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+ } 
+
+
+    <div class="fixed top-4 right-4 z-50">
+      @if (alertMessage) {
+      <app-alert [message]="alertMessage" [type]="alertType"></app-alert>
+      }
+    </div>

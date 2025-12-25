@@ -1,0 +1,105 @@
+<section class="py-5 my-15 top-1/2">
+  <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
+
+    <!-- Left Column: Contact Form -->
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-6 text-gray-900">Send Us a Message</h2>
+<form [formGroup]="contactForm" (ngSubmit)="submitForm()">
+
+  <!-- Name -->
+  <div class="mb-4">
+    <label class="block text-gray-700 mb-2 font-medium">Name</label>
+    <input type="text" formControlName="name"
+           class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+    @if (f['name'].touched && f['name'].invalid) {
+      <div class="text-red-500 text-sm mt-1">
+        @if (f['name'].errors?.['required']) {
+          <div>Name is required.</div>
+        }
+        @if (f['name'].errors?.['minlength']) {
+          <div>Name must be at least 2 characters.</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Email -->
+  <div class="mb-4">
+    <label class="block text-gray-700 mb-2 font-medium">Email</label>
+    <input type="email" formControlName="email"
+           class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+    @if (f['email'].touched && f['email'].invalid) {
+      <div class="text-red-500 text-sm mt-1">
+        @if (f['email'].errors?.['required']) {
+          <div>Email is required.</div>
+        }
+        @if (f['email'].errors?.['email']) {
+          <div>Enter a valid email address.</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Message -->
+  <div class="mb-6">
+    <label class="block text-gray-700 mb-2 font-medium">Message</label>
+    <textarea rows="5" formControlName="message"
+              class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+
+    @if (f['message'].touched && f['message'].invalid) {
+      <div class="text-red-500 text-sm mt-1">
+        @if (f['message'].errors?.['required']) {
+          <div>Message is required.</div>
+        }
+        @if (f['message'].errors?.['minlength']) {
+          <div>Message must be at least 5 characters.</div>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition">
+    Send Message
+  </button>
+</form>
+
+
+    </div>
+
+    <!-- Right Column: Contact Info + Map -->
+    <div class="space-y-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-4 text-gray-900">Get in Touch</h2>
+        <p class="text-gray-600">
+          We’re available Monday to Friday, 9:00 AM to 6:00 PM (EST).
+        </p>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="bg-blue-100 p-3 rounded-full">📍</div>
+        <p class="text-gray-700">Shop No. 12, Ch.Shivaji Chowk, Sangli, Maharashtra 416416</p>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="bg-blue-100 p-3 rounded-full">📞</div>
+        <p class="text-gray-700">+91 2345 678 910</p>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="bg-blue-100 p-3 rounded-full">📧</div>
+        <p class="text-gray-700">support@dreamhomes.in</p>
+      </div>
+
+      <div class="h-64 rounded-lg overflow-hidden shadow-md">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15000!2d74.5868!3d17.1727!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2zMTfCsDEwJzI2LjAiTiA3NMKwMzUnNDguMCJF!5e0!3m2!1sen!2sin!4v1234567890123"
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+</section>

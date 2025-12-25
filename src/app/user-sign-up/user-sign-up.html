@@ -1,0 +1,185 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 p-4 z-20">
+  <div class="relative w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden bg-white">
+    <div class="flex flex-col lg:flex-row w-full">
+
+      <!-- Sign Up Form -->
+      <div
+        class="w-full lg:w-1/2 flex items-center justify-center bg-white p-8"
+        [ngClass]="{
+          'hidden': !isSignUp && screenWidth < 1024,
+          'block': isSignUp && screenWidth < 1024,
+          'lg:flex': true
+        }"
+      >
+        <div class="w-full max-w-sm">
+          <h2 class="text-2xl font-bold mb-6 text-center text-indigo-600">Create Account</h2>
+          <form [formGroup]="signUpForm" (ngSubmit)="onSignUpSubmit()">
+            <input type="text" formControlName="name" placeholder="Name" class="input-style" />
+            @if (signUpForm.get('name')?.touched && signUpForm.get('name')?.invalid) {
+              <div class="text-red-600 text-sm">Name is required</div>
+            }
+
+            <input type="email" formControlName="email" placeholder="Email" class="input-style" />
+            @if (signUpForm.get('email')?.touched && signUpForm.get('email')?.invalid) {
+              <div class="text-red-600 text-sm">
+                @if (signUpForm.get('email')?.errors?.['required']) {
+                  Email is required
+                }
+                @if (signUpForm.get('email')?.errors?.['email']) {
+                  Enter a valid email
+                }
+              </div>
+            }
+
+            <input type="password" formControlName="password" placeholder="Password" class="input-style" />
+            @if (signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid) {
+              <div class="text-red-600 text-sm">Password is required</div>
+            }
+
+            <button type="submit" class="btn-style">Sign Up</button>
+          </form>
+
+          <div class="mt-4 text-center lg:hidden">
+            <button (click)="toggleMode()" class="text-indigo-600 hover:underline">
+              Already have an account? Sign In
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sign In Form -->
+      <div
+        class="w-full lg:w-1/2 flex lg:items-end lg:justify-end md:justify-center md:items-center sm:justify-center sm:items-center bg-white p-8"
+        [ngClass]="{
+          'hidden': isSignUp && screenWidth < 1024,
+          'block': !isSignUp && screenWidth < 1024,
+          'lg:flex': true
+        }"
+      >
+        <div class="w-full max-w-sm">
+          <h2 class="text-2xl font-bold mb-6 text-center text-purple-600">Welcome Back</h2>
+          <form [formGroup]="signInForm" (ngSubmit)="onSignInSubmit()">
+            <input type="email" formControlName="email" placeholder="Email" class="input-style" />
+            @if (signInForm.get('email')?.touched && signInForm.get('email')?.invalid) {
+              <div class="text-red-600 text-sm">
+                @if (signInForm.get('email')?.errors?.['required']) {
+                  Email is required
+                }
+                @if (signInForm.get('email')?.errors?.['email']) {
+                  Enter a valid email
+                }
+              </div>
+            }
+
+            <input type="password" formControlName="password" placeholder="Password" class="input-style" />
+            @if (signInForm.get('password')?.touched && signInForm.get('password')?.invalid) {
+              <div class="text-red-600 text-sm">Password is required</div>
+            }
+
+            <button type="submit" class="btn-style bg-purple-600 hover:bg-purple-700">Sign In</button>
+            <!-- Forgot Password link -->
+<!-- <div class="text-right mb-4">
+  <button
+    type="button"
+    (click)="openForgotPasswordModal()"
+    class="text-sm text-indigo-600 hover:underline"
+  >
+    Forgot Password?
+  </button>
+</div> -->
+
+          </form>
+
+          <div class="mt-4 text-center lg:hidden">
+            <button (click)="toggleMode()" class="text-purple-600 hover:underline">
+              Don’t have an account? Sign Up
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Panel for large screens -->
+    <div
+      class="hidden lg:flex absolute inset-y-0 right-0 w-1/2 bg-indigo-600 text-white flex-col items-center justify-center p-10 transition-all duration-500"
+      [ngStyle]="{ transform: isSignUp ? 'translateX(0%)' : 'translateX(-100%)' }"
+    >
+      <div class="text-center">
+        <h2 class="text-3xl font-bold mb-4">
+          {{ isSignUp ? 'Hello, Friend!' : 'Welcome Back!' }} 
+        </h2>
+        <p class="mb-6 text-sm">
+          {{ isSignUp 
+            ? 'Enter your personal details and start your journey with us'
+            : 'To keep connected with us, please sign in with your personal info' }}
+        </p>
+        <button
+          (click)="toggleMode()"
+          class="border-white border px-6 py-2 rounded-full hover:bg-white hover:text-indigo-600 transition-all"
+        >
+          {{ isSignUp ? 'Sign In' : 'Sign Up' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  *ngIf="showForgotPasswordModal"
+>
+  <div class="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 relative">
+    <!-- Close Button -->
+    <button
+      (click)="closeForgotPasswordModal()"
+      class="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+    >
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold mb-4 text-indigo-600 text-center">
+      Reset Password
+    </h2>
+
+    <form [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPasswordSubmit()">
+      <!-- Email -->
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Enter your registered email"
+        class="input-style mb-3"
+      />
+
+      <!-- New Password -->
+      <input
+        type="password"
+        formControlName="newPassword"
+        placeholder="Enter new password"
+        class="input-style mb-3"
+      />
+
+      @if (forgotPasswordForm.invalid && forgotPasswordForm.touched) {
+        <div class="text-red-600 text-sm mb-2">
+          Please enter valid details
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="btn-style w-full bg-indigo-600 hover:bg-indigo-700"
+      >
+        Update Password
+      </button>
+    </form>
+  </div>
+</div>
+
+</div>
+
+<!-- <app-alert [message]="alertMessage" [type]="alertType"></app-alert> -->
+
+<div class="fixed top-4 right-4 z-50">
+  @if (alertMessage) {
+    <app-alert [message]="alertMessage" [type]="alertType"></app-alert>
+  }
+</div>
